@@ -1,0 +1,82 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>cookie</title> 
+
+	<script type="text/javascript" src="js/jq.js"></script>
+	<script type="text/javascript" src="js/sb-1.3.0.js"></script>
+    <script type="text/javascript">
+
+    // call 'setupSpacebrew' function on pageload
+		$(window).on("load", setupSpacebrew);
+
+		// call 'setupUI' function on pageinit
+		$(document).bind("pageinit", setupUI);
+
+		// Spacebrew Variables/Objects
+		var sb , app_name = "cookie" , values = {};
+
+		// called on pageload
+		function setupSpacebrew (){
+			console.log("Setting up spacebrew connection");
+			sb = new Spacebrew.Client();
+			sb.name(app_name);
+			sb.description("Processing to Web");
+			// configure the publication and subscription feeds
+			sb.addSubscribe("sensor", "cookie", "1");
+			// override Spacebrew events - this is how you catch events coming from Spacebrew
+			sb.onCustomMessage = onCustomMessage;
+			sb.onOpen = onOpen;
+			// connect to spacbrew
+			sb.connect();
+		};
+
+		//called when Spacebrew connection is established
+		function onOpen() {
+			console.log("spacebrew is open");
+		}
+
+		// called on init
+		function setupUI() {
+			console.log("Setup called");
+		}
+
+		function onCustomMessage(name, value){
+			console.log("Received new message ", value);
+			$("#value").html(name+" // "+value);
+		
+            var val_mult = (value*5) - 600;
+			$('#bar').css({"left":val_mult});
+		};
+
+    </script>
+
+    <style>
+    	#value{
+ 	    	position:absolute;
+	    	width:auto;
+	    	padding:5px 15px;
+	    	background-color: #cccccc;
+	    	height:20px;
+	    	left:1;
+	    	top:30;   		
+    	}
+	    #bar{
+	    	position:absolute;
+	    	width:500px;
+	    	background-color: white;
+	    	height:100%;
+	    	left:1;
+	    	top:0;
+	    }
+    </style>
+
+</head> 
+<body> 
+
+<img src="http://img-cdn.jg.jugem.jp/b3b/2467240/20140218_836375.png?_ga=1.243696197.1528181988.1376184106" width="500" height="500">
+<div id="bar"></div>
+
+
+</body>
+</html>
